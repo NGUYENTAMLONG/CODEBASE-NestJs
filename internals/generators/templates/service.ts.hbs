@@ -1,0 +1,9 @@
+import { Injectable } from '@nestjs/common';
+
+import { {{ properCase name }}Repository } from './{{ name }}.repository';
+
+
+@Injectable()
+export class {{ properCase name }}Service {
+  constructor(private readonly {{ camelCase name }}Repository: {{ properCase name }}Repository) {}
+}

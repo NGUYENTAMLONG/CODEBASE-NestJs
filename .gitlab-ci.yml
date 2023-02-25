@@ -1,0 +1,49 @@
+image: node:16.16.0-alpine3.16
+
+workflow:
+    rules:
+    - if: '$CI_PIPELINE_SOURCE == "push" && $CI_COMMIT_REF_NAME == "develop"'
+      when: always
+      changes:
+        - src/**/*
+        - package.json
+        - package-lock.json
+    - if: '$CI_PIPELINE_SOURCE == "web" || $CI_PIPELINE_SOURCE == "merge_request_event"'
+      when: always
+      changes:
+        - src/**/*
+        - package.json
+        - package-lock.json
+stages:
+  - test
+  - deploy
+
+.Tags: &tags
+  - vmo-hipt
+
+cache:
+  paths:
+    - node_modules/
+
+test-job:
+  stage: test
+  tags: *tags
+  retry: 0
+  rules:
+    - when: always
+  script:
+    - npm install
+    - npm run lint:check
+    - npm run build
+
+deploy-job:
+  stage: deploy
+  tags: *tags
+  retry: 0
+  rules:
+    - if: '$CI_PIPELINE_SOURCE == "push" && $CI_COMMIT_REF_NAME == "develop"'
+      when: always
+  before_script:
+    - cat $APP_ENV > .env
+  script:
+    - docker compose up -d --build

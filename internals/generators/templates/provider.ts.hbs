@@ -1,0 +1,11 @@
+import { DataSource } from 'typeorm';
+import { {{ upperCase name }}_CONST } from './{{ name }}.constant';
+import { {{ properCase name }}Entity } from './{{ name }}.entity';
+
+export const {{ properCase name }}Provider = [
+  {
+    provide: {{ upperCase name }}_CONST.MODEL_PROVIDER,
+    useFactory: (connection: DataSource) => connection.getRepository({{ properCase name }}Entity),
+    inject: ['DATA_SOURCE'],
+  },
+];

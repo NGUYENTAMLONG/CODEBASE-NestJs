@@ -1,0 +1,13 @@
+import { Inject, Injectable } from '@nestjs/common';
+import { Repository } from 'typeorm';
+import { BaseRepository } from '../../database/base/repository.base';
+
+import { {{ upperCase name }}_CONST } from './{{ name }}.constant';
+import { {{ properCase name }}Entity } from './{{ name }}.entity';
+
+@Injectable()
+export class {{ properCase name }}Repository extends BaseRepository<{{ properCase name }}Entity> {
+  constructor(@Inject({{ upperCase name }}_CONST.MODEL_PROVIDER) {{ properCase name }}Repository: Repository<{{ properCase name }}Entity>) {
+    super({{ properCase name }}Repository);
+  }
+}
